@@ -20,7 +20,8 @@ class StoreVideoRequest extends FormRequest {
     public function rules(): array {
         return [
             'name' => 'required|max:255',
-            'url' => 'required|file|mimes:avi,mp4|max:2048',
+            // 'url' => 'required|file|mimes:avi,mp4|max:2048',
+            'url' => 'required',
             'tags' => 'max:25',
             'isPrivate' => 'boolean'
         ];

@@ -15,7 +15,7 @@ class ImageFactory extends Factory {
      */
     public function definition(): array {
         return [
-            'url' => fake()->url()
+            'url' => 'https://a.espncdn.com/combiner/i?img=/i/teamlogos/soccer/500/1936.png'
         ];
     }
 }

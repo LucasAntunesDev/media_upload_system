@@ -1,2 +1,11 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://svelte.dev/docs/kit">svelte.dev/docs/kit</a> to read the documentation</p>
+<script>
+  import "../css/app.css";
+  let count = $state(0);
+</script>
+
+<button
+  onclick={() => count++}
+  class="bg-emerald-600 rounded-md px-2 py-1.5 text-white"
+>
+  clicks: {count}
+</button>

@@ -21,5 +21,5 @@ Route::prefix('images')->group(function () {
 
     Route::post('create', [ImageController::class, 'store']);
 
-    Route::delete('delete/{image}', [ImageController::class, 'destroy']);
+    Route::delete('{image}', [ImageController::class, 'destroy']);
 });

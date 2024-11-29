@@ -12,6 +12,7 @@ return new class extends Migration {
         Schema::create('images', function (Blueprint $table) {
             $table->id();
             $table->string('url', 255);
+            $table->boolean('isFavourite')->nullable()->default(false);
             $table->timestamps();
         });
     }

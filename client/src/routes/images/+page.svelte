@@ -1,12 +1,17 @@
 <script lang="ts">
   import {onMount} from 'svelte'
   import api from '../../services/api'
+  import axios from 'axios'
+
   interface Image {
     id: number
     url: string
+    isFavourite: boolean
   }
 
   let images: Image[] = $state([])
+
+  //Carrega as imagens
   const fetchImages = async () => {
     try {
       const response = await api().get<Image[]>('/images/list')
@@ -15,10 +20,39 @@
       console.error('Erro ao buscar imagens:', error)
     }
   }
+
   onMount(() => {
     fetchImages()
   })
 
+  //Envio da imagem ao backend
+  const handleFormSubmit = async (event: Event) => {
+    event.preventDefault()
+
+    const formData = new FormData()
+    const fileInput = (event.target as HTMLFormElement).url as HTMLInputElement
+
+    if (fileInput.files && fileInput.files.length > 0) {
+      formData.append('url', fileInput.files[0])
+
+      try {
+        await axios.post('http://localhost:8000/images/create', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        })
+
+        openModal = false
+        fetchImages()
+      } catch (error) {
+        alert('Não foi possível concluir o envio: ' + error)
+      }
+    } else {
+      alert('Por favor, selecione um arquivo para enviar.')
+    }
+  }
+
+  //Define o estado do modal (aberto ou fechado)
   let openModal: boolean = $state(false)
 </script>
 
@@ -42,20 +76,38 @@
 </h1>
 
 <button
-  onclick={() => (openModal = true)}
-  class="bg-emerald-600 px-2 py-1.5 rounded-lg mx-auto w-fit flex"
-  >Abrir modal</button>
+  onclick={() => (openModal = !openModal)}
+  class="bg-emerald-600 px-2 py-1.5 rounded-lg mx-auto w-fit flex text-white"
+  >Adicionar nova imagem</button>
 
 {#if openModal}
   <div
-    class="w-[50vw] h-fit py-6 px-10 bg-neutral-900/50 backdrop-blur-sm rounded-md z-10 mx-auto absolute">
-    <button onclick={() => (openModal = false)}>X</button>
-    Olá
+    class="w-[50vw] h-fit py-12 px-10 bg-white border-gray-200 border-2 rounded-md z-10 mx-auto absolute inset-0">
+    <button onclick={() => (openModal = !openModal)}
+      ><svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke-width="1.5"
+        stroke="currentColor"
+        class="size-6">
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M6 18 18 6M6 6l12 12" />
+      </svg>
+    </button>
 
-    <form>
-      <input type="file" name="image" id="image" />
-      <button type="submit" class="bg-emerald-600 px-2 py-1.5 rounded-lg"
-        >Manda bala</button>
+    <h1 class="text-xl">Adicionar imagem</h1>
+
+    <form onsubmit={handleFormSubmit} class="flex flex-col gap-2">
+      <input type="file" name="url" id="url" accept="image/*" />
+
+      <button
+        type="submit"
+        class="bg-emerald-600 px-2 py-1.5 rounded-lg text-white w-fit">
+        Manda bala
+      </button>
     </form>
   </div>
 {/if}
@@ -66,9 +118,51 @@
       class="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3px-10 w-screen gap-2">
       {#each images as image}
         <div>
-          <p>...</p>
-          <img src={image.url} alt="" class="rounded max-w-[90%]" />
-          <p>Salvar</p>
+          <button
+            ><svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke-width="1.5"
+              stroke="currentColor"
+              class="size-6">
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z" />
+            </svg>
+          </button>
+          <img
+            src={`http://localhost:8000/storage/${image.url}`}
+            alt=""
+            class="rounded max-w-80" />
+          <button>
+            {#if !image.isFavourite}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="size-6">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
+              </svg>
+            {:else}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 24 24"
+                fill="currentColor"
+                class="size-6">
+                <path
+                  fill-rule="evenodd"
+                  d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
+                  clip-rule="evenodd" />
+              </svg>
+            {/if}
+          </button>
         </div>
       {/each}
     </div>

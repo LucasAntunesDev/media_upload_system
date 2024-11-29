@@ -13,6 +13,7 @@ class Video extends Model {
         'name',
         'url',
         'tags',
+        'isFavourite',
         'isPrivate'
     ];
 }

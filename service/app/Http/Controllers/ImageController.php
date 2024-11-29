@@ -16,14 +16,14 @@ class ImageController extends Controller {
         return $image;
     }
     public function store(StoreImageRequest $image) {
-        // $path = $image->file('url')->store('images', 'public');
+        $path = $image->file('url')->store('images', 'public');
 
-        // if (!$path) {
-        //     return response()->json(['message' => 'Erro ao armazenar a imagem.'], 500);
-        // }
+        if (!$path) {
+            return response()->json(['message' => 'Erro ao armazenar a imagem.'], 500);
+        }
 
         $newImage = Image::create([
-            'url' => $image->input('url'),
+            'url' => $path,
         ]);
 
         if ($newImage) {

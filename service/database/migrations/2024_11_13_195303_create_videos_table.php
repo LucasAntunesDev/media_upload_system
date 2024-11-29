@@ -11,6 +11,7 @@ return new class extends Migration {
             $table->string('name');
             $table->string('url', 255);
             $table->string('tags')->nullable();
+            $table->boolean('isFavourite')->nullable()->default(false);
             $table->boolean('isPrivate')->nullable()->default(false);
             $table->timestamps();
         });

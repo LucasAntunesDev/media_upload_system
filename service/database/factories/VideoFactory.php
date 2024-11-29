@@ -18,6 +18,7 @@ class VideoFactory extends Factory {
             'name' => fake()->name(),
             'url' => fake()->url(),
             'tags' => fake()->randomLetter(),
+            'isFavourite' => fake()->boolean(),
             'isPrivate' => fake()->boolean(),
         ];
     }

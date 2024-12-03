@@ -13,7 +13,7 @@ Route::prefix('videos')->group(function () {
 
     Route::post('create', [VideoController::class, 'store']);
 
-    Route::delete('delete/{video}', [VideoController::class, 'destroy']);
+    Route::delete('{video}', [VideoController::class, 'destroy']);
 });
 
 Route::prefix('images')->group(function () {

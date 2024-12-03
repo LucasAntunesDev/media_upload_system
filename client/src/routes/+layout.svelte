@@ -1,6 +1,5 @@
 <script lang="ts">
   import '../css/app.css'
-  console.log('hello world')
   let {children} = $props()
 </script>
 

@@ -16,16 +16,17 @@ class VideoController extends Controller {
         return $video;
     }
     public function store(StoreVideoRequest $video) {
-        // $path = $video->file('url')->store('videos', 'public');
+        $videoPath = $video->file('url')->store('videos', 'public');
+        $thumbnailPath = $video->file('thumbnail')->store('images', 'public');
 
-        // if (!$path) {
-        //     return response()->json(['message' => 'Erro ao armazenar o vídeo.'], 500);
-        // }
+        if (!$videoPath) {
+            return response()->json(['message' => 'Erro ao armazenar o vídeo.'], 500);
+        }
 
         $newVideo = Video::create([
             'name' => $video->input('name'),
-            'url' => $video->input('url'),
-            // 'url' => $path,
+            'url' => $videoPath,
+            'thumbnail' => $thumbnailPath,
             'tags' => $video->input('tags'),
             'isPrivate' => $video->input('isPrivate'),
         ]);

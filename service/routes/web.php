@@ -1,7 +1,7 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ImageController;
-use App\Http\Controllers\JWTAuthController;
 use App\Http\Controllers\VideoController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Support\Facades\Route;
@@ -27,9 +27,9 @@ Route::prefix('images')->group(function () {
 });
 
 Route::prefix('user')->group(function () {
-    Route::post('register', [JWTAuthController::class, 'register']);
+    Route::post('register', [AuthController::class, 'register']);
 
-    Route::post('login', [JWTAuthController::class, 'login']);
+    Route::post('login', [AuthController::class, 'login']);
 
-    Route::middleware([JwtMiddleware::class])->get('logout', [JWTAuthController::class, 'logout']);
+    Route::middleware([JwtMiddleware::class])->get('logout', [AuthController::class, 'logout']);
 });

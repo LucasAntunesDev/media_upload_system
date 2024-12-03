@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Http\Controllers;
 
 use App\Models\User;
@@ -9,7 +11,8 @@ use Illuminate\Support\Facades\Validator;
 use Tymon\JWTAuth\Facades\JWTAuth;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
-class JWTAuthController extends Controller {
+
+class AuthController extends Controller {
     public function register(Request $request) {
         $data = $request->validate([
             'name' => 'required|string|max:255',

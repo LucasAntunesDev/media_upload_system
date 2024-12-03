@@ -1,10 +1,27 @@
-<script>
-  let username = ''
+<script lang="ts">
+  // import api from '../../services/api'
+  import axios from 'axios'
+  import {auth, login} from '../../../services/auth'
+
+  let email = ''
   let password = ''
 
-  const handleLogin = () => {
-    // Lógica para autenticar o usuário
-    console.log('Usuário:', username, 'Senha:', password)
+  const handleLogin = async (event: Event) => {
+    event.preventDefault()
+
+    await login({email: email, password: password})
+    // try {
+    //   const response = await axios.post('https://localhost:8000/user/login', {
+    //     name,
+    //     password,
+    //   })
+
+    //   console.log('Login bem-sucedido:', response.data)
+    // } catch (error) {
+    //   console.error('Erro no login:', error)
+    // }
+
+    // console.log('Usuário:', name, 'Senha:', password)
   }
 </script>
 
@@ -12,10 +29,10 @@
   <h1 class="text-red-600 text-4xl font-bold">Login</h1>
   <form on:submit|preventDefault={handleLogin}>
     <label class="block text-sm font-medium leading-6 text-gray-900">
-      Nome de usuário:
+      Email:
       <input
-        type="text"
-        bind:value={username}
+        type="email"
+        bind:value={email}
         class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary sm:text-sm sm:leading-6 outline-none" />
     </label>
     <label class="block text-sm font-medium leading-6 text-gray-900">

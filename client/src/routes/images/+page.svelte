@@ -1,17 +1,20 @@
 <script lang="ts">
   import {onMount} from 'svelte'
+  import {get} from 'svelte/store'
   import api from '../../services/api'
+  import {auth} from '../../services/auth'
+  import Modal from '../../components/Modal.svelte'
   import axios from 'axios'
-
   interface Image {
     id: number
     url: string
     isFavourite: boolean
   }
-
-  let images: Image[] = $state([])
-
-  //Carrega as imagens
+  let images: Image[] = []
+  let isAuthenticated = get(auth).token !== ''
+  let openModal: boolean = false
+  let file = null
+  let message = ''
   const fetchImages = async () => {
     try {
       const response = await api().get<Image[]>('/images/list')
@@ -20,54 +23,43 @@
       console.error('Erro ao buscar imagens:', error)
     }
   }
-
   onMount(() => {
     fetchImages()
   })
-
-  //Envio da imagem ao backend
   const handleFormSubmit = async (event: Event) => {
     event.preventDefault()
-
     const formData = new FormData()
-    const fileInput = (event.target as HTMLFormElement).url as HTMLInputElement
-
-    if (fileInput.files && fileInput.files.length > 0) {
-      formData.append('url', fileInput.files[0])
-
+    if (file) {
+      formData.append('url', file)
       try {
         await axios.post('http://localhost:8000/images/create', formData, {
-          headers: {
-            'Content-Type': 'multipart/form-data',
-          },
+          headers: {'Content-Type': 'multipart/form-data'},
         })
-
-        openModal = false
+        message = 'Imagem enviada com sucesso!'
+        openModal = !openModal
         fetchImages()
+        message = ''
+        file = ''
       } catch (error) {
-        alert('Não foi possível concluir o envio: ' + error)
+        message = 'Erro ao enviar imagem: ' + error
       }
     } else {
-      alert('Por favor, selecione um arquivo para enviar.')
+      message = 'Por favor, selecione um arquivo para enviar.'
     }
   }
-
   const deleteImage = async (imageId: number) => {
     try {
       await api().delete(`/images/${imageId}`)
-      // Atualiza a lista de imagens após a exclusão
       images = images.filter(image => image.id !== imageId)
     } catch (error) {
       console.error('Erro ao excluir imagem:', error)
     }
   }
-
-  //Define o estado do modal (aberto ou fechado)
-  let openModal: boolean = $state(false)
 </script>
 
-<h1 class="text-4xl flex w-fit font-bold items-center gap-2 mx-auto my-5">
-  Página de imagens<svg
+<h1
+  class="text-4xl flex w-fit font-bold items-center gap-2 mx-auto my-5 text-primary bg">
+  Página de Imagens <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"
     height="24"
@@ -77,51 +69,64 @@
     stroke-width="2"
     stroke-linecap="round"
     stroke-linejoin="round"
-    class="lucide lucide-images size-8"
-    ><path d="M18 22H4a2 2 0 0 1-2-2V6" /><path
-      d="m22 13-1.296-1.296a2.41 2.41 0 0 0-3.408 0L11 18" /><circle
-      cx="12"
-      cy="8"
-      r="2" /><rect width="16" height="16" x="6" y="2" rx="2" /></svg>
+    class="lucide lucide-images size-8">
+    <path d="M18 22H4a2 2 0 0 1-2-2V6" />
+    <path d="m22 13-1.296-1.296a2.41 2.41 0 0 0-3.408 0L11 18" />
+    <circle cx="12" cy="8" r="2" />
+    <rect width="16" height="16" x="6" y="2" rx="2" />
+  </svg>
 </h1>
-
-<button
-  onclick={() => (openModal = !openModal)}
-  class="bg-emerald-600 px-2 py-1.5 rounded-lg mx-auto w-fit flex text-white"
-  >Adicionar nova imagem</button>
-
-{#if openModal}
-  <div
-    class="w-[50vw] h-fit py-12 px-10 bg-white border-gray-200 border-2 rounded-md z-10 mx-auto absolute inset-0">
-    <button onclick={() => (openModal = !openModal)}
-      ><svg
-        xmlns="http://www.w3.org/2000/svg"
-        fill="none"
-        viewBox="0 0 24 24"
-        stroke-width="1.5"
-        stroke="currentColor"
-        class="size-6">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M6 18 18 6M6 6l12 12" />
-      </svg>
-    </button>
-
-    <h1 class="text-xl">Adicionar imagem</h1>
-
-    <hr class="py-4" />
-
-    <form onsubmit={handleFormSubmit} class="flex flex-col gap-2">
-      <input type="file" name="url" id="url" accept="image/*" />
-
-      <button
-        type="submit"
-        class="bg-emerald-600 px-2 py-1.5 rounded-lg text-white w-fit">
-        Manda bala
-      </button>
-    </form>
-  </div>
+{#if isAuthenticated}
+  <button
+    onclick={() => (openModal = !openModal)}
+    class="flex mx-auto btn-outline mt-4">
+    Adicionar Imagem <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke-width="1.5"
+      stroke="currentColor"
+      class="size-5">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+    </svg>
+  </button>
+  <Modal
+    title="Adicionar Imagem"
+    {openModal}
+    oncloseModal={() => (openModal = !openModal)}
+    onsubmit={handleFormSubmit}>
+    <div slot="body">
+      <form onsubmit={handleFormSubmit} class="flex flex-col gap-2">
+        <input
+          type="file"
+          name="url"
+          id="url"
+          accept="image/*"
+          onchange={e => (file = e.target.files[0])} />
+        <button type="submit" class="btn-success w-fit mx-auto">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke-width="1.5"
+            stroke="currentColor"
+            class="size-5">
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5m-13.5-9L12 3m0 0 4.5 4.5M12 3v13.5" />
+          </svg>
+          Enviar
+        </button>
+        {#if message}
+          <p>{message}</p>
+        {/if}
+      </form>
+    </div>
+  </Modal>
 {/if}
 
 <main>

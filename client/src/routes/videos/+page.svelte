@@ -16,7 +16,6 @@
 
   let videos: Video[] = $state([])
 
-  // Carrega os vídeos
   const fetchVideos = async () => {
     try {
       const response = await api().get<Video[]>('/videos/list')
@@ -119,7 +118,7 @@
 
 {#if openModal}
   <div
-    class="w-[50vw] h-fit py-12 px-10 bg-white border-gray-200 border-2 rounded-md z-10 mx-auto absolute inset-0">
+    class="w-[50vw] h-fit py-12 px-10 border-gray-200 border-2 rounded-md z-10 mx-auto absolute inset-0">
     <button onclick={() => (openModal = !openModal)}
       ><svg
         xmlns="http://www.w3.org/2000/svg"

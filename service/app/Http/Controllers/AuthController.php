@@ -34,12 +34,14 @@ class AuthController extends Controller {
     public function login(Request $request) {
         $credentials = $request->only('email', 'password');
 
+        // dd(JWTAuth::attempt($credentials));
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'Invalid credentials'], 401);
             }
 
             $user = JWTAuth::user();
+
 
             # No caso de atribuir um papel
             #$token = JWTAuth::claims(['role' => $user->role])->fromUser($user);
@@ -51,16 +53,24 @@ class AuthController extends Controller {
         }
     }
 
-    public function getUser() {
-        try {
-            if (! $user = JWTAuth::parseToken()->authenticate()) {
-                return response()->json(['error' => 'User not found'], 404);
-            }
-        } catch (JWTException $e) {
-            return response()->json(['error' => 'Invalid token'], 400);
-        }
+    public function getProfile(Request $request) {
+        $user = JWTAuth::parseToken()->authenticate();
 
-        return response()->json(compact('user'));
+        return response()->json([
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+
+        ], 200);
+    }
+
+    public function showUser(string $id) {
+        $user = User::find($id);
+        if ($user) {
+            return response()->json($user);
+        } else {
+            return response()->json(['message' => 'User not found'], 404);
+        }
     }
 
     public function logout() {

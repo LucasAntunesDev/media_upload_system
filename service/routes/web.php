@@ -31,5 +31,9 @@ Route::prefix('user')->group(function () {
 
     Route::post('login', [AuthController::class, 'login']);
 
+    Route::get('tokenProfile', [AuthController::class, 'getProfile']);
+
+    Route::get('showUser/{id}', [AuthController::class, 'showUser']);
+
     Route::middleware([JwtMiddleware::class])->get('logout', [AuthController::class, 'logout']);
 });

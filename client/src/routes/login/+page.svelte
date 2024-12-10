@@ -1,7 +1,7 @@
 <script lang="ts">
   // import api from '../../services/api'
   import axios from 'axios'
-  import {auth, login} from '../../../services/auth'
+  import {auth, login} from '../../services/auth'
 
   let email = ''
   let password = ''

@@ -8,7 +8,7 @@
     id: number
     name: string
     url: string
-    thumbanil: string
+    thumbnail: string
     tags: string
     isFavourite: boolean
     isPrivate: boolean
@@ -192,6 +192,7 @@
           <button
             onclick={() => deleteVideo(video.id)}
             class=" text-red-600"
+            aria-label="Excluir vídeo"
             title="Excluir vídeo">
             <svg
               xmlns="http://www.w3.org/2000/svg"

@@ -1,114 +1,140 @@
-import { writable } from 'svelte/store'
-import api from './api';
-import { onMount } from 'svelte';
-// import navigate
+import {writable, get} from 'svelte/store'
+import {redirect} from '@sveltejs/kit'
+import api from './api'
 
 interface AuthState {
-  token: string;
-  id: number | null;
-  name: string | null;
-  type: string | null;
-  completeUser: any | null;
+  token: string
+  id: number | null
+  name: string | null
+  email: string | null
+  completeUser: any | null
 }
 
 const initialAuthState: AuthState = {
   token: '',
   id: null,
   name: null,
-  type: null,
+  email: null,
   completeUser: null,
-};
+}
 
-const auth = writable<AuthState>(initialAuthState);
+const auth = writable<AuthState>(initialAuthState)
 
-onMount(() => { 
-  const storedToken = JSON.parse(localStorage.getItem('trabalho_final_prog3') as string)?.token || ''; auth.update(state => ({ ...state, token: storedToken })); 
-}); 
-
-const login = async (data: { email: string, password: string }): Promise<void> => {
+if (typeof window !== 'undefined') {
+  let parsedData
   try {
-    const response = await api().post('/login', {
+    parsedData = JSON.parse(localStorage.getItem('trabalho_final_prog3'))
+  } catch (e) {
+    parsedData = {}
+  }
+
+  if (parsedData?.token) {
+    auth.set({
+      ...initialAuthState,
+      token: parsedData.token,
+      id: parsedData.id || null,
+      name: parsedData.name || null,
+      email: parsedData.email || null,
+    })
+  }
+}
+
+const login = async (data: {
+  email: string
+  password: string
+}): Promise<void> => {
+  try {
+    const response = await api().post('user/login', {
       email: data.email,
       password: data.password,
-    });
+    })
 
     if (response.status === 200) {
-      const res = response.data;
+      const res = response.data
+      console.log('roootsss' + res)
+      debugger
       if (res.token) {
         auth.update(state => {
-          state.token = res.token;
-          localStorage.setItem('trabalho_final_prog3', JSON.stringify({ token: res.token }));
-          return state;
-        });
-        // navigate('/');
-        location.replace('/')
+          const newState = {...state, token: res.token}
+          localStorage.setItem(
+            'trabalho_final_prog3',
+            JSON.stringify({token: res.token})
+          )
+          return newState
+        })
+
+        setTimeout(async () => {
+          await getProfile()
+        }, 0)
+
+        window.location.replace('/')
       } else {
-        throw new Error('Token não encontrado na resposta');
+        throw new Error('Token não encontrado na resposta')
       }
     } else {
-      console.error('Ocorreu algum erro no login. Tente novamente.');
+      console.error('Ocorreu algum erro no login. Tente novamente.')
     }
   } catch (err) {
-    console.error('Erro na requisição:', err);
+    console.error('Erro na requisição:', err)
   }
-};
+}
 
 const logout = async (): Promise<void> => {
   try {
-    await api().post('/logout');
+    await api().get('user/logout')
     auth.update(state => {
-      state.token = '';
-      state.id = null;
-      state.name = null;
-      state.type = null;
-      state.completeUser = null;
-      localStorage.removeItem('trabalho_final_prog3');
-      return state;
-    });
-    // navigate('/');
-    location.replace('/')
-  } catch (error) {
-    console.error('Erro ao fazer logout:', error);
-  }
-};
+      localStorage.removeItem('trabalho_final_prog3')
+      return {...initialAuthState}
+    })
 
-const getProfile = async (): Promise<{ id: number, name: string, type: string } | null> => {
+    window.location.replace('/')
+  } catch (error) {
+    console.error('Erro ao fazer logout:', error)
+  }
+}
+
+const getProfile = async (): Promise<{
+  id: number
+  name: string
+  email: string
+} | null> => {
   try {
-    const response = await api().get('/tokenProfile');
+    const response = await api().get('user/tokenProfile')
     if (response.status === 200) {
-      const { id, name, type } = response.data;
-      auth.update(state => {
-        state.id = id;
-        state.name = name;
-        state.type = type;
-        return state;
-      });
-      return { id, name, type };
+      const {id, name, email} = response.data
+      console.log(response.data)
+      console.log(`id : ${id}, name : ${name}, email : ${email}`)
+      auth.update(state => ({
+        ...state,
+        id,
+        name,
+        email,
+      }))
+      return {id, name, email}
     }
   } catch (error) {
-    console.error('Erro ao buscar perfil:', error);
-    return null;
+    console.error('Erro ao buscar perfil:', error)
+    return null
   }
-};
+}
 
 const getCompleteUser = async (): Promise<any | null> => {
-  let currentId: number | null;
-  auth.subscribe(state => currentId = state.id);
-  if (!currentId) return null;
+  const currentId = get(auth).id
+  if (!currentId) return null
 
   try {
-    const response = await api().get(`/usuarios/${currentId}`);
+    const response = await api().get(`/user/showUser/${currentId}`)
     if (response.status === 200) {
-      auth.update(state => {
-        state.completeUser = response.data;
-        return state;
-      });
-      return response.data;
+      auth.update(state => ({
+        ...state,
+        completeUser: response.data,
+      }))
+      return response.data
     }
   } catch (error) {
-    console.error('Erro ao buscar os data do usuário:', error);
-    return null;
+    console.error('Erro ao buscar os dados completos do usuário:', error)
+    return null
   }
-};
+}
 
-export { auth, login, logout, getProfile, getCompleteUser };
+export {auth, login, logout, getProfile, getCompleteUser}

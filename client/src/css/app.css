@@ -51,7 +51,7 @@
   }
 
   .btn-outline {
-    @apply h-fit px-6 py-3 ring-1 ring-gray-700 hover:bg-neutral-900 rounded-lg justify-center items-center gap-2 inline-flex text-zinc-50 disabled:text-gray-300 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 ring-1 ring-neutral-600 hover:bg-neutral-800 rounded-lg justify-center items-center gap-2 inline-flex text-zinc-50 disabled:text-gray-300 leading-none text-sm capitalize transition ease-in-out duration-300
   }
 
   .btn-success {
@@ -67,7 +67,7 @@
   }
 
   .text-input {
-    @apply block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary sm:text-sm sm:leading-6 outline-none
+    @apply bg-transparent block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-zinc-50 ring-1 ring-inset ring-neutral-700 placeholder:text-zinc-200 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 outline-none
   }
 
   .entering {

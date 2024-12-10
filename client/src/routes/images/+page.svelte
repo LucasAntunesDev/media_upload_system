@@ -58,7 +58,7 @@
 </script>
 
 <h1
-  class="text-4xl flex w-fit font-bold items-center gap-2 mx-auto my-5 text-primary bg">
+  class="text-4xl flex w-fit font-bold items-center gap-2 mx-auto my-5 text-primary">
   Página de Imagens <svg
     xmlns="http://www.w3.org/2000/svg"
     width="24"

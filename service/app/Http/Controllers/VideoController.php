@@ -17,7 +17,10 @@ class VideoController extends Controller {
         return $videos;
     }
     public function show($id) {
+        $user = JWTAuth::parseToken()->authenticate();
         $video = Video::find($id);
+
+        $video->favorited = $user->favoriteVideos()->where('video_id', $video->id)->exists();
         return $video;
     }
     public function store(StoreVideoRequest $video) {

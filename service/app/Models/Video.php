@@ -14,7 +14,6 @@ class Video extends Model {
         'url',
         'thumbnail',
         'tags',
-        'isFavourite',
         'isPrivate'
     ];
 }

@@ -11,6 +11,32 @@
   animation: l3 1s infinite linear;
 }
 
+.image-gradient {
+  background: linear-gradient(
+    to top right,
+    #f58529,
+    #feda77,
+    #dd2a7b,
+    #8134af,
+    #515bd4
+  );
+  background-clip: border-box;
+  color: white;
+}
+
+.image-gradient-text {
+  background: linear-gradient(
+    to right,
+    #f58529,
+    #feda77,
+    #dd2a7b,
+    #8134af,
+    #515bd4
+  );
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 @keyframes l3 {
   20% {
     background-position: 0% 0%, 50% 50%, 100% 50%;
@@ -31,43 +57,43 @@
 
 @layer components {
   .custom-transition {
-    @apply transition ease-in-out duration-300
+    @apply transition ease-in-out duration-300;
   }
 
   .btn-primary {
-    @apply h-fit px-6 py-3 bg-primary hover:bg-red-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-primary/50 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 bg-primary hover:bg-red-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-primary/50 leading-none text-sm capitalize transition ease-in-out duration-300;
   }
 
   .btn-secondary {
-    @apply h-fit px-6 py-3 bg-secondary hover:bg-pink-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-secondary/50 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 bg-secondary hover:bg-pink-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-secondary/50 leading-none text-sm capitalize transition ease-in-out duration-300;
   }
 
   .btn-neutral {
-    @apply h-fit px-6 py-3 bg-neutral-900 hover:bg-neutral-800 rounded-lg justify-center items-center gap-2 inline-flex text-zinc-50 disabled:bg-neutral-900/50 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 bg-neutral-900 hover:bg-neutral-800 rounded-lg justify-center items-center gap-2 inline-flex text-zinc-50 disabled:bg-neutral-900/50 leading-none text-sm capitalize transition ease-in-out duration-300;
   }
 
   .btn-subtle {
-    @apply h-fit px-6 py-3 hover:ring-1 hover:ring-gray-700 rounded-lg justify-center items-center gap-2 inline-flex text-zinc-50 disabled:text-gray-300 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 hover:ring-1 hover:ring-gray-700 rounded-lg justify-center items-center gap-2 inline-flex text-zinc-50 disabled:text-gray-300 leading-none text-sm capitalize transition ease-in-out duration-300;
   }
 
   .btn-outline {
-    @apply h-fit px-6 py-3 ring-1 ring-gray-700 hover:bg-neutral-900 rounded-lg justify-center items-center gap-2 inline-flex text-zinc-50 disabled:text-gray-300 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 ring-1 ring-neutral-600 hover:bg-neutral-800 rounded-lg justify-center items-center gap-2 inline-flex text-zinc-50 disabled:text-gray-300 leading-none text-sm capitalize transition ease-in-out duration-300;
   }
 
   .btn-success {
-    @apply h-fit px-6 py-3 bg-success hover:bg-emerald-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-success/50 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 bg-success hover:bg-emerald-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-success/50 leading-none text-sm capitalize transition ease-in-out duration-300;
   }
 
   .btn-danger {
-    @apply h-fit px-6 py-3 bg-danger hover:bg-rose-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-danger/50 focus:bg-rose-500 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 bg-danger hover:bg-rose-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-danger/50 focus:bg-rose-500 leading-none text-sm capitalize transition ease-in-out duration-300;
   }
 
   .btn-warning {
-    @apply h-fit px-6 py-3 bg-warning hover:bg-yellow-500 rounded-lg justify-center items-center gap-2 inline-flex text-warning-dark disabled:bg-warning/50 leading-none text-sm capitalize transition ease-in-out duration-300
+    @apply h-fit px-6 py-3 bg-warning hover:bg-yellow-500 rounded-lg justify-center items-center gap-2 inline-flex text-warning-dark disabled:bg-warning/50 leading-none text-sm capitalize transition ease-in-out duration-300;
   }
 
   .text-input {
-    @apply block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-secondary sm:text-sm sm:leading-6 outline-none
+    @apply bg-transparent block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-zinc-50 ring-1 ring-inset ring-neutral-700 placeholder:text-zinc-200 focus:ring-2 focus:ring-inset focus:ring-primary sm:text-sm sm:leading-6 outline-none;
   }
 
   .entering {
@@ -79,5 +105,4 @@
     @apply ease-in-out duration-500 opacity-100;
     animation: leave 0.5s forwards;
   }
-
 }

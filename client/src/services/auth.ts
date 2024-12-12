@@ -52,7 +52,7 @@ const login = async (data: {
     if (response.status === 200) {
       const res = response.data
       console.log('roootsss' + res)
-      debugger
+
       if (res.token) {
         auth.update(state => {
           const newState = {...state, token: res.token}

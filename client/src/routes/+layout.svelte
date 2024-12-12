@@ -80,11 +80,7 @@
           onclick={handleLogout}>Logout</button>
       {:else}
         <div class="justify-start items-center gap-2.5 hidden md:flex">
-          <a
-            class="btn-h-fit px-6 py-3 hover:ring-1 hover:ring-gray-200 rounded-lg justify-center items-center gap-2 inline-flex text-gray-700 disabled:text-gray-300 leading-none text-sm capitalize transition ease-in-out duration-300"
-            href="/register">
-            Criar Conta
-          </a>
+          <a class="btn-outline" href="/register"> Criar Conta </a>
 
           <a
             class="h-fit px-6 py-3 bg-teal-600 hover:bg-teal-700 rounded-lg justify-center items-center gap-2 inline-flex text-white disabled:bg-primary/50 leading-none text-sm capitalize transition ease-in-out duration-300"

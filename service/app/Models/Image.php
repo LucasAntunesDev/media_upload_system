@@ -10,4 +10,8 @@ class Image extends Model {
     protected $fillable = [
         'url',
     ];
+
+    public function favoritedByUsers() {
+        return $this->belongsToMany(User::class, 'image_user_favorites')->withTimestamps();
+    }
 }

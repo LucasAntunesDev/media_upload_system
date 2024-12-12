@@ -41,6 +41,7 @@ class AuthController extends Controller {
             }
 
             $user = JWTAuth::user();
+            // dd($user);
 
 
             # No caso de atribuir um papel

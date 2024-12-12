@@ -52,4 +52,12 @@ class User extends Authenticatable implements JWTSubject {
     public function getJWTCustomClaims() {
         return [];
     }
+
+    public function favoriteImages() {
+        return $this->belongsToMany(Image::class, 'image_user_favorites')->withTimestamps();
+    }
+
+    public function favoriteVideos() {
+        return $this->belongsToMany(Video::class, 'video_user_favorites')->withTimestamps();
+    }
 }

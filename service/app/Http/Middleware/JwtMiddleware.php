@@ -16,10 +16,18 @@ class JwtMiddleware {
      */
     public function handle(Request $request, Closure $next): Response {
         try {
-            JWTAuth::parseToken()->authenticate();
+            $user = JWTAuth::parseToken()->authenticate();
+
+            if (!$user) {
+                return response()->json(['error' => 'User not found'], 404);
+            }
+
+            // Defina o usuário autenticado no request
+            $request->merge(['user' => $user]);
         } catch (JWTException $e) {
             return response()->json(['error' => 'Token not valid'], 401);
         }
+
         return $next($request);
     }
 }

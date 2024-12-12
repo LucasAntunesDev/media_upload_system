@@ -16,4 +16,8 @@ class Video extends Model {
         'tags',
         'isPrivate'
     ];
+
+    public function favoritedByUsers() {
+        return $this->belongsToMany(User::class, 'video_user_favorites')->withTimestamps();
+    }
 }

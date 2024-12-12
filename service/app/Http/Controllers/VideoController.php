@@ -5,10 +5,15 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreVideoRequest;
 use App\Models\Video;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class VideoController extends Controller {
     public function index() {
-        $videos = Video::all();
+        $user = JWTAuth::parseToken()->authenticate();
+        $videos = Video::all()->map(function ($video) use ($user) {
+            $video->favorited = $user->favoriteVideos()->where('video_id', $video->id)->exists();
+            return $video;
+        });
         return $videos;
     }
     public function show($id) {

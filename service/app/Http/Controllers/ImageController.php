@@ -5,10 +5,18 @@ namespace App\Http\Controllers;
 use App\Http\Requests\StoreImageRequest;
 use App\Models\Image;
 use Illuminate\Http\Request;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class ImageController extends Controller {
     public function index() {
-        $images = Image::all();
+        $user = JWTAuth::parseToken()->authenticate();
+        $images = Image::all()->map(function ($image) use ($user) {
+            $image->favorited = $user->favoriteImages()->where('image_id', $image->id)->exists();
+            return $image;
+        });
+
+        return response()->json($images);
+
         return $images;
     }
     public function show($id) {

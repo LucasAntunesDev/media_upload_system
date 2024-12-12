@@ -175,7 +175,7 @@
     <div
       class="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {#each videos as video}
-        <div class="relative">
+        <div class="relative aspect-video">
           <a href={`/videos/show/${video.id}`}>
             <img
               src={`http://localhost:8000/storage/${video.thumbnail}`}

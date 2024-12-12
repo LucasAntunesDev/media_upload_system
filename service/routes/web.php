@@ -13,6 +13,8 @@ Route::get('/teste', function () {
 Route::prefix('videos')->group(function () {
     Route::get('list', [VideoController::class, 'index']);
 
+    Route::get('show/{id}', [VideoController::class, 'show']);
+
     Route::post('create', [VideoController::class, 'store']);
 
     Route::delete('{video}', [VideoController::class, 'destroy']);

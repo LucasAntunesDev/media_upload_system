@@ -63,45 +63,53 @@
 </script>
 
 <h1
-  class="text-4xl inline-flex w-fit font-bold items-center gap-1.5 text-primary">
-  Página de início
+  class="text-4xl flex w-fit font-bold items-center gap-1.5 text-primary mx-auto">
+  Página inicial
 </h1>
 
-<h2 class="text-2xl font-bold mt-6">Últimas Imagens</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-  {#if images.length > 0}
-    {#each images as image}
-      <div class="border p-2 rounded-lg">
-        <img
-          src={`http://localhost:8000/storage/${image.url}`}
-          alt={image.name}
-          class="w-full h-48 object-cover rounded" />
-        <h3 class="text-lg font-semibold mt-2">{image.name}</h3>
-      </div>
-    {/each}
-  {:else}
-    <p>Carregando imagens...</p>
-  {/if}
-</div>
+<div class="flex flex-col w-screen px-20 gap-8 flex-wrap">
+  <div>
+    <h2 class="text-2xl font-bold mt-6">Imagens mais recentes</h2>
+    <a href="/images" class="text-sm text-gray-200 hover:underline">Ver mais</a>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+    {#if images.length > 0}
+      {#each images as image}
+        <div class="p-2 rounded-lg">
+          <img
+            src={`http://localhost:8000/storage/${image.url}`}
+            alt={image.name}
+            class="w-56 rounded" />
+          <h3 class="text-lg font-semibold mt-2">{image.name}</h3>
+        </div>
+      {/each}
+    {:else}
+      <p>Carregando imagens...</p>
+    {/if}
+  </div>
 
-<h2 class="text-2xl font-bold mt-6">Vídeos</h2>
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
-  {#if videos.length > 0}
-    {#each videos as video}
-      <div class="border p-2 rounded-lg">
-        <video
-          class="player w-full h-48"
-          playsinline
-          controls
-          data-poster={`http://localhost:8000/storage/${video.thumbnail}`}>
-          <source
-            src={`http://localhost:8000/storage/${video.url}`}
-            type="video/mp4" />
-        </video>
-        <h3 class="text-lg font-semibold mt-2">{video.name}</h3>
-      </div>
-    {/each}
-  {:else}
-    <p>Carregando vídeos...</p>
-  {/if}
+  <div>
+    <h2 class="text-2xl font-bold mt-6">Vídeos mais recentes</h2>
+    <a href="/videos" class="text-sm text-gray-200 hover:underline">Ver mais</a>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+    {#if videos.length > 0}
+      {#each videos as video}
+        <div class="p-2 rounded-lg">
+          <video
+            class="player w-full w-56"
+            playsinline
+            controls
+            data-poster={`http://localhost:8000/storage/${video.thumbnail}`}>
+            <source
+              src={`http://localhost:8000/storage/${video.url}`}
+              type="video/mp4" />
+          </video>
+          <h3 class="text-lg font-semibold mt-2">{video.name}</h3>
+        </div>
+      {/each}
+    {:else}
+      <p>Carregando vídeos...</p>
+    {/if}
+  </div>
 </div>

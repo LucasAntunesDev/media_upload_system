@@ -31,9 +31,9 @@
 </script>
 
 <main
-  class="w-screen h-fit min-h-screen flex items-center justify-center gap-4 flex-col flex-wrap md:bg-gray-50">
+  class="w-screen h-fit min-h-screen flex items-center justify-center gap-4 flex-col flex-wrap bg-neutral-800">
   <fieldset
-    class=" hidden md:flex justify-center items-center gap-y-2 gap-x-24 p-10 rounded-lg w-fit h-fit py-10 shadow-xl mx-auto">
+    class=" hidden md:flex justify-center items-center gap-y-2 gap-x-24 p-10 rounded-lg w-fit h-fit py-10 shadow-xl mx-auto bg-neutral-900/60">
     <div class="w-fit">
       <div>
         <p class="text-red-600 text-4xl font-bold">Cadastrar-se</p>
@@ -41,40 +41,31 @@
           Já tem uma conta?
           <a
             href="./login"
-            class="text-red-600 hover:text-pink-700 custom-transition">
+            class="text-red-600 hover:underline custom-transition">
             Entrar
           </a>
         </p>
       </div>
       <form onsubmit={handleRegister} class="flex flex-col justify-center">
-        <label class="block text-sm font-medium leading-6 text-gray-900">
+        <label class="block text-sm font-medium leading-6 text-gray-50">
           Nome
-          <input
-            type="text"
-            bind:value={name}
-            class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none" />
+          <input type="text" bind:value={name} class="text-input" />
         </label>
-        <label class="block text-sm font-medium leading-6 text-gray-900">
+        <label class="block text-sm font-medium leading-6 text-gray-50">
           E-mail
-          <input
-            type="email"
-            bind:value={email}
-            class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none" />
+          <input type="email" bind:value={email} class="text-input" />
         </label>
-        <label class="block text-sm font-medium leading-6 text-gray-900">
+        <label class="block text-sm font-medium leading-6 text-gray-50">
           Senha
-          <input
-            type="password"
-            bind:value={password}
-            class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none" />
+          <input type="password" bind:value={password} class="text-input" />
         </label>
-        <label class="block text-sm font-medium leading-6 text-gray-900">
+        <label class="block text-sm font-medium leading-6 text-gray-50">
           Confirme a Senha
           <input
             type="password"
             bind:value={confirmPassword}
             name="password_confirmation"
-            class="block w-full rounded-md border-0 py-1.5 pl-7 pr-20 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-red-600 sm:text-sm sm:leading-6 outline-none" />
+            class="text-input" />
         </label>
         <button
           type="submit"

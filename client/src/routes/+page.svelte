@@ -5,7 +5,6 @@
   import 'plyr/dist/plyr.css'
 
   const api = apiService
-  // Interfaces para Imagens e Vídeos
   interface Image {
     id: number
     url: string
@@ -21,21 +20,18 @@
     isFavourite: boolean
   }
 
-  // Estados para armazenar imagens e vídeos
   let images: Image[] = $state([])
   let videos: Video[] = $state([])
 
-  // Buscar as últimas 3 imagens
   const fetchImages = async () => {
     try {
       const response = await api().get<Image[]>('/images/list')
-      images = response.data.slice(-3) // Pega as últimas 3 imagens
+      images = response.data.slice(-3)
     } catch (error) {
       console.error('Erro ao buscar imagens:', error)
     }
   }
 
-  // Buscar os vídeos
   const fetchVideos = async () => {
     try {
       const response = await api().get<Video[]>('/videos/list')
@@ -46,7 +42,6 @@
     }
   }
 
-  // Inicializa o Plyr para os vídeos
   const initializePlyr = async () => {
     if (typeof window !== 'undefined') {
       const {default: Plyr} = await import('plyr')

@@ -51,7 +51,6 @@ const login = async (data: {
 
     if (response.status === 200) {
       const res = response.data
-      console.log('roootsss' + res)
 
       if (res.token) {
         auth.update(state => {
@@ -102,8 +101,6 @@ const getProfile = async (): Promise<{
     const response = await api().get('user/tokenProfile')
     if (response.status === 200) {
       const {id, name, email} = response.data
-      console.log(response.data)
-      console.log(`id : ${id}, name : ${name}, email : ${email}`)
       auth.update(state => ({
         ...state,
         id,

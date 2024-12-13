@@ -22,7 +22,6 @@ class JwtMiddleware {
                 return response()->json(['error' => 'User not found'], 404);
             }
 
-            // Defina o usuário autenticado no request
             $request->merge(['user' => $user]);
         } catch (JWTException $e) {
             return response()->json(['error' => 'Token not valid'], 401);

@@ -34,18 +34,13 @@ class AuthController extends Controller {
     public function login(Request $request) {
         $credentials = $request->only('email', 'password');
 
-        // dd(JWTAuth::attempt($credentials));
         try {
             if (! $token = JWTAuth::attempt($credentials)) {
                 return response()->json(['error' => 'Invalid credentials'], 401);
             }
 
             $user = JWTAuth::user();
-            // dd($user);
 
-
-            # No caso de atribuir um papel
-            #$token = JWTAuth::claims(['role' => $user->role])->fromUser($user);
             $token = JWTAuth::fromUser($user);
 
             return response()->json(compact('token'));

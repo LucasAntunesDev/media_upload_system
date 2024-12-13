@@ -10,10 +10,12 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class VideoController extends Controller {
     public function index() {
         $user = JWTAuth::parseToken()->authenticate();
+
         $videos = Video::all()->map(function ($video) use ($user) {
             $video->favorited = $user->favoriteVideos()->where('video_id', $video->id)->exists();
             return $video;
         });
+
         return $videos;
     }
     public function show($id) {
@@ -50,8 +52,7 @@ class VideoController extends Controller {
             'message' => 'Deu ruim. Te vira aí pra descobrir o que aconteceu.'
         ], 422);
     }
-    public function update() {
-    }
+
     public function destroy(Video $video) {
         $video->delete();
 

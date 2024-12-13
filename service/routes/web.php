@@ -8,10 +8,6 @@ use App\Http\Controllers\VideoFavoriteController;
 use App\Http\Middleware\JwtMiddleware;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/teste', function () {
-    return 'roots bloody roots';
-});
-
 Route::prefix('videos')->group(function () {
     Route::get('list', [VideoController::class, 'index']);
 
@@ -34,6 +30,7 @@ Route::prefix('images')->group(function () {
     Route::delete('{image}', [ImageController::class, 'destroy']);
 
     Route::post('{image}/favorite', [ImageFavoriteController::class, 'addFavorite']);
+
     Route::delete('{image}/favorite', [ImageFavoriteController::class, 'removeFavorite']);
 });
 

@@ -10,6 +10,7 @@ use Tymon\JWTAuth\Facades\JWTAuth;
 class ImageController extends Controller {
     public function index() {
         $user = JWTAuth::parseToken()->authenticate();
+
         $images = Image::all()->map(function ($image) use ($user) {
             $image->favorited = $user->favoriteImages()->where('image_id', $image->id)->exists();
             return $image;
@@ -45,8 +46,7 @@ class ImageController extends Controller {
             'message' => 'Deu ruim. Te vira aí pra descobrir o que aconteceu.'
         ], 422);
     }
-    public function update() {
-    }
+
     public function destroy(Image $image) {
         $image->delete();
 

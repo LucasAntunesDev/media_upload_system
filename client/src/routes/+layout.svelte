@@ -44,7 +44,6 @@
     class="screen h-16 px-10 md:px-20 py-2 justify-between items-center flex text-zinc-100 text-sm">
     <div class="flex w-fit gap-x-10 items-center justify-between h-fit">
       <a href="/" class="w-fit">
-        <!-- <span>Logo</span> -->
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -93,9 +92,4 @@
   </header>
 
   {@render children()}
-
-  <!-- <footer
-    class="screen flex-wrap h-fit px-10 py-4 md:px-20  border-b-2 justify-between items-center flex flex-col text-slate-600 text-sm">
-    <h6>Lucas Antunes, 2024</h6>
-  </footer> -->
 </div>

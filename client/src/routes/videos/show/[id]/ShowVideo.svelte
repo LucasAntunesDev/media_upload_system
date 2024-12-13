@@ -40,10 +40,6 @@
         await api().post(`/videos/${video.id}/favorite`)
         video.favorited = true
       }
-
-      // videos = videos.map(vd =>
-      //   vd.id === video.id ? {...vd, favorited: !vd.favorited} : vd,
-      // )
     } catch (error) {
       console.error('Erro ao atualizar favorito:', error)
     }

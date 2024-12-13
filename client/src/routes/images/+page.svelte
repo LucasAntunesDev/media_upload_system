@@ -22,10 +22,15 @@
 
   let message = ''
 
+  let isLoading: boolean = true
+  let isSubmitting: boolean = false
+
   const fetchImages = async () => {
     try {
       const response = await api().get<Image[]>('/images/list')
       images = response.data
+
+      isLoading = false
     } catch (error) {
       console.error('Erro ao buscar imagens:', error)
     }
@@ -35,6 +40,7 @@
   })
   const handleFormSubmit = async (event: Event) => {
     event.preventDefault()
+    isSubmitting = true
     const formData = new FormData()
 
     if (file) {
@@ -52,6 +58,7 @@
 
         message = ''
         file = ''
+        isSubmitting = false
       } catch (error) {
         message = 'Erro ao enviar imagem: ' + error
       }
@@ -157,6 +164,7 @@
       oncloseModal={() => (openModal = !openModal)}
       onsubmit={handleFormSubmit}>
       <div slot="body">
+        {#if isSubmitting}<p>Enviando...</p>{/if}
         <form onsubmit={handleFormSubmit} class="flex flex-col gap-2">
           <input
             type="file"
@@ -189,9 +197,18 @@
 </div>
 
 <main>
-  {#if images.length > 0}
-    <div
-      class="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 px-10 w-screen gap-2">
+  <div
+    class="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:md:grid-cols-3 px-10 w-screen gap-2">
+    {#if isLoading}
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+    {/if}
+
+    {#if images.length > 0 && !isLoading}
       {#each images as image}
         <div class="relative">
           <img
@@ -228,40 +245,10 @@
             {/if}
           </button>
 
-          <!-- {#if isAuthenticated}
-            <button
-              onclick={() => toggleFavourite(image.id)}
-              class="absolute top-2 right-2"
-              title="Marcar como favorito">
-              {#if !image.isFavourite}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="size-6 text-gray-400 hover:text-red-500">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0 1 11.186 0Z" />
-                </svg>
-              {:else}
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                  class="size-6 text-red-500">
-                  <path
-                    fill-rule="evenodd"
-                    d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z"
-                    clip-rule="evenodd" />
-                </svg>
-              {/if}
-            </button>
-          {/if} -->
-
-          <button onclick={() => deleteImage(image.id)} class="mt-2">
+          <button
+            onclick={() => deleteImage(image.id)}
+            class="mt-2"
+            aria-label="delete image">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -277,8 +264,12 @@
           </button>
         </div>
       {/each}
-    </div>
-  {:else}
-    <p>Carregando imagens...</p>
-  {/if}
+    {/if}
+
+    {#if images.length < 0 && !isLoading}
+      <p class="mx-auto font-bold flex w-fit text-2xl">
+        Ainda não há imagens no sistema. Faça upload de alguma
+      </p>
+    {/if}
+  </div>
 </main>

@@ -64,7 +64,7 @@
           type="video/mp4" />
       </video>
     </div>
-    <h1 class="text-4xl font-bold mb-4">{video.name}</h1>
+    <h1 class="text-4xl font-bold mb-4 my-8">{video.name}</h1>
     <button
       onclick={() => toggleFavorite(video)}
       class="mt-2"
@@ -93,7 +93,7 @@
         </svg>
       {/if}
     </button>
-    <p class="mt-4 text-gray-600">{video.tags}</p>
+    <p class="mt-4 text-gray-100">{video.tags}</p>
   </div>
 {:else}
   <p class="text-center mt-10">Carregando vídeo...</p>

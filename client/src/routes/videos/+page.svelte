@@ -26,14 +26,20 @@
 
   let file = null
   let thumbnail = null
-
   let name = ''
+  let tags = ''
+
   let message = ''
+
+  let isLoading: boolean = true
+  let isSubmitting: boolean = false
 
   const fetchVideos = async () => {
     try {
       const response = await api().get<Video[]>('/videos/list')
       videos = response.data
+
+      isLoading = false
     } catch (error) {
       console.error('Erro ao buscar vídeos:', error)
     }
@@ -45,12 +51,17 @@
 
   const handleFormSubmit = async (event: Event) => {
     event.preventDefault()
+    isSubmitting = true
 
     const formData = new FormData()
     if (file && thumbnail && name) {
       formData.append('url', file)
       formData.append('thumbnail', thumbnail)
       formData.append('name', name)
+
+      if (tags) {
+        formData.append('tags', tags)
+      }
 
       try {
         await axios.post('http://localhost:8000/videos/create', formData, {
@@ -62,7 +73,9 @@
         message = ''
         file = null
         thumbnail = null
+        tags = ''
         name = ''
+        isSubmitting = false
       } catch (error) {
         message = 'Erro ao enviar vídeo: ' + error
       }
@@ -168,6 +181,10 @@
   oncloseModal={() => (openModal = !openModal)}
   onsubmit={handleFormSubmit}>
   <div slot="body">
+    {#if isSubmitting}
+      <p>Enviando...</p>
+    {/if}
+
     <form onsubmit={handleFormSubmit} class="flex flex-col gap-2">
       <label class="flex flex-col">
         Vídeo
@@ -187,6 +204,11 @@
         type="text"
         placeholder="Nome do vídeo"
         bind:value={name}
+        class="text-input" />
+      <input
+        type="text"
+        placeholder="Tags do vídeo"
+        bind:value={tags}
         class="text-input" />
       <button type="submit" class="btn-success w-fit mx-auto">
         <svg
@@ -208,18 +230,30 @@
 </Modal>
 
 <main class="mt-6">
-  {#if videos.length > 0}
-    <div
-      class="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-screen px-20">
+  <div
+    class="grid justify-items-center grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 w-screen px-20">
+    {#if isLoading}
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+      <div class="rounded bg-neutral-700 animate-pulse h-56 w-72"></div>
+    {/if}
+
+    {#if videos.length > 0 && !isLoading}
       {#each videos as video}
-        <div class="relative aspect-video">
+        <div class="relative group overflow-hidden">
           <a href={`/videos/show/${video.id}`}>
             <img
               src={`http://localhost:8000/storage/${video.thumbnail}`}
               alt={`Thumbnail de ${video.name}`}
-              class="w-full h-auto rounded shadow" />
+              class="w-full h-auto rounded shadow transform transition-transform duration-300 group-hover:brightness-75" />
           </a>
-          <h1 class="capitalize font-bold mt-2">{video.name}</h1>
+          <h1
+            class="capitalize font-bold mt-2 text-zinc-200 transition-colors duration-300 group-hover:text-zinc-200">
+            {video.name}
+          </h1>
           <div>
             <button
               onclick={() => toggleFavorite(video)}
@@ -270,8 +304,12 @@
           </div>
         </div>
       {/each}
-    </div>
-  {:else}
-    <p>Carregando vídeos...</p>
-  {/if}
+    {/if}
+
+    {#if videos.length < 0 && !isLoading}
+      <p class="mx-auto font-bold flex w-fit text-2xl">
+        Ainda não há vídeos no sistema. Faça upload de algum.
+      </p>
+    {/if}
+  </div>
 </main>
